@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feliz cumple, Luma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --night:#15123a; --deep:#0d0b26; --moon:#fff1c4; --rose:#ff8fb1; --mint:#7be8d4; --lilac:#b9a8ff;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;color:var(--moon);font-family:"Nunito",system-ui,sans-serif;
+  background:radial-gradient(ellipse at 50% 0%,#2a2470 0%,var(--night) 45%,var(--deep) 100%) fixed;overflow-x:hidden}
+main{max-width:720px;margin:0 auto;padding:32px 20px 64px;text-align:center}
+h1{font-family:"Fraunces",Georgia,serif;font-weight:800;font-size:clamp(2.6rem,11vw,5rem);line-height:1;margin:.4em 0 .2em;letter-spacing:-.02em}
+p.lead{font-size:1.1rem;max-width:34ch;margin:0 auto 1.2em;line-height:1.5;color:#e6dcff}
+.moonwrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:24px}A
+#moon{position:relative;width:min(56vw,230px);aspect-ratio:1;border-radius:50%;overflow:hidden;border:0;padding:0;cursor:pointer;
+  background:radial-gradient(circle at 35% 30%,#fffbe8,var(--moon) 55%,#e8cf8e);box-shadow:0 0 0 0 rgba(255,241,196,0);
+  transition:box-shadow .8s}
+#moon::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--deep);transform:translateX(calc(var(--t,0)*100%));transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+#moon.full{box-shadow:0 0 90px 30px rgba(255,241,196,.45)}
+#moon:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--mint);outline-offset:4px}
+#hint{font-size:.95rem;color:var(--lilac);min-height:1.4em}
+#reveal{opacity:0;transform:translateY(12px);transition:opacity .8s,transform .8s;pointer-events:none;height:0;overflow:hidden}
+#reveal.on{opacity:1;transform:none;pointer-events:auto;height:auto;overflow:visible}
+h2{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:1.5rem;margin:1.6em 0 .3em}
+.sky{position:relative;height:300px;margin:12px 0;border-radius:24px;background:rgba(255,255,255,.04);border:1px solid rgba(185,168,255,.25)}
+.star{position:absolute;width:44px;height:44px;border:0;background:none;color:var(--moon);font-size:1.7rem;cursor:pointer;transform:translate(-50%,-50%);transition:transform .2s,color .2s}
+.star:hover{transform:translate(-50%,-50%) scale(1.25)}
+.star.seen{color:var(--rose)}
+#wish{min-height:5.5em;max-width:40ch;margin:12px auto 0;font-size:1.15rem;line-height:1.5}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+input{font:inherit;padding:12px 16px;border-radius:999px;border:1px solid var(--lilac);background:rgba(255,255,255,.07);color:var(--moon);min-width:0;width:220px}
+input::placeholder{color:#bfb4e6}
+.btn{font:inherit;font-weight:700;padding:12px 24px;border-radius:999px;border:0;cursor:pointer;background:var(--rose);color:#3b0f24}
+.btn:active{transform:scale(.97)}
+.hug{font-size:1.2rem;padding:16px 32px}
+.hug.pop{animation:pop .5s}
+@keyframes pop{40%{transform:scale(1.25)}100%{transform:scale(1)}}
+#thanks{font-family:"Fraunces",Georgia,serif;font-size:1.5rem;line-height:1.35;max-width:22ch;margin:22px auto 0;opacity:0;transform:scale(.8);transition:opacity .6s,transform .6s cubic-bezier(.2,1.4,.4,1)}
+#thanks.on{opacity:1;transform:none}
+#card{margin:22px auto 0;max-width:420px;padding:24px;border-radius:24px;background:linear-gradient(160deg,rgba(255,143,177,.18),rgba(123,232,212,.14));border:1px solid rgba(255,241,196,.3);display:none}
+#card.on{display:block}
+#card strong{font-family:"Fraunces",Georgia,serif;font-size:1.5rem;display:block;margin-bottom:.4em}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:10}
+@media (prefers-reduced-motion:reduce){#moon::after,#reveal{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas>
+<main>
+  <div class="moonwrap">
+    <button id="moon" aria-label="Tocá la luna para llenarla"></button>
+    <div id="hint" aria-live="polite">Tocá la luna para llenarla</div>
+  </div>
+  <h1>Feliz cumple, Luma</h1>
+  <p class="lead">Hoy la luna se llena de luz solo para vos.</p>
+
+  <section id="reveal">
+    <h2>Tocá las estrellas</h2>
+    <p class="lead" style="margin-bottom:0">Cada una guarda un deseo para tu nuevo año.</p>
+    <div class="sky" id="sky"></div>
+    <div id="wish" aria-live="polite">Elegí una estrella ✦</div>
+
+    <h2>Dejá tu saludo</h2>
+    <div class="row"><button class="btn hug" id="hug">Enviar abrazo 🤗</button></div>
+    <p id="thanks" aria-live="polite">Abrazo recibido, gracias por ser la persona tan genial que eres</p>
+  </section>
+</main>
+<script>
+const moon=document.getElementById('moon'),hint=document.getElementById('hint'),reveal=document.getElementById('reveal');
+const steps=[.25,.5,.75,1];let phase=0;
+const hints=['Seguí tocando…','Casi, un poco más…','Una vez más…','¡Luna llena!'];
+moon.addEventListener('click',()=>{
+  if(phase>=steps.length)return;
+  moon.style.setProperty('--t',steps[phase]);
+  hint.textContent=hints[phase];phase++;
+  if(phase===steps.length){moon.classList.add('full');reveal.classList.add('on');confetti();setTimeout(()=>reveal.scrollIntoView({behavior:'smooth',block:'start'}),900)}
+});
+const wishes=[
+ 'Que cada día tenga al menos una razón para reírte a carcajadas.',
+ 'Que los proyectos que soñás empiecen a salir de la cabeza y se hagan reales.',
+ 'Que estés rodeada de gente que te quiere tal como sos.',
+ 'Que tengas tiempo para descansar sin culpa.',
+ 'Que este año te sorprenda con cosas lindas que ni imaginabas.',
+ 'Que nunca te falte luz, ni propia ni prestada.'
+];
+const pos=[[18,28],[42,16],[72,24],[28,64],[56,56],[82,70]];
+const sky=document.getElementById('sky'),wish=document.getElementById('wish');
+pos.forEach((p,i)=>{
+  const b=document.createElement('button');b.className='star';b.textContent='✦';
+  b.style.left=p[0]+'%';b.style.top=p[1]+'%';b.setAttribute('aria-label','Estrella '+(i+1));
+  b.onclick=()=>{wish.textContent=wishes[i];b.classList.add('seen');burst(b)};
+  sky.appendChild(b);
+});
+const hug=document.getElementById('hug'),thanks=document.getElementById('thanks');
+hug.onclick=()=>{
+  hug.classList.remove('pop');void hug.offsetWidth;hug.classList.add('pop');
+  const r=hug.getBoundingClientRect();hearts(r.left+r.width/2,r.top+r.height/2);
+  add(r.left+r.width/2,r.top+r.height/2,90,1.5);
+  thanks.classList.add('on');
+};
+const cv=document.getElementById('fx'),cx=cv.getContext('2d');let parts=[],run=false;
+function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio}
+size();addEventListener('resize',size);
+const cols=['#ff8fb1','#7be8d4','#b9a8ff','#fff1c4'];
+function add(x,y,n,spread){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=(Math.random()*6+2)*spread;
+  parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-4,r:Math.random()*5+3,c:cols[i%4],l:100+Math.random()*60})}go()}
+function confetti(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  add(innerWidth*.25,innerHeight*.6,70,1.2);add(innerWidth*.75,innerHeight*.6,70,1.2)}
+function burst(el){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  const r=el.getBoundingClientRect();add(r.left+r.width/2,r.top+r.height/2,18,.7)}
+function hearts(x,y){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  for(let i=0;i<26;i++){const a=Math.random()*Math.PI*2,sp=Math.random()*7+3;
+    parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-5,r:Math.random()*14+14,c:'#ff8fb1',h:1,l:90+Math.random()*50})}go()}
+function go(){if(run)return;run=true;(function f(){
+  cx.clearRect(0,0,cv.width,cv.height);const d=devicePixelRatio;
+  parts=parts.filter(p=>p.l>0);
+  parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.18;p.l--;cx.globalAlpha=Math.min(1,p.l/40);cx.fillStyle=p.c;
+    if(p.h){cx.font=(p.r*d)+'px serif';cx.fillText('❤',p.x*d,p.y*d)}else cx.fillRect(p.x*d,p.y*d,p.r*d,p.r*d)});
+  if(parts.length)requestAnimationFrame(f);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}})()}
+</script>
+</body>
+</html>
