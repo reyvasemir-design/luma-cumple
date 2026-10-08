@@ -4,62 +4,68 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Feliz cumple, Luma</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,800&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --night:#15123a; --deep:#0d0b26; --moon:#fff1c4; --rose:#ff8fb1; --mint:#7be8d4; --lilac:#b9a8ff;
-  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
-}
+:root{--night:#15123a;--deep:#0d0b26;--moon:#fff1c4;--rose:#ff8fb1;--mint:#7be8d4;--lilac:#b9a8ff;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;min-height:100vh;color:var(--moon);font-family:"Nunito",system-ui,sans-serif;
-  background:radial-gradient(ellipse at 50% 0%,#2a2470 0%,var(--night) 45%,var(--deep) 100%) fixed;overflow-x:hidden}
-main{max-width:720px;margin:0 auto;padding:32px 20px 64px;text-align:center}
-h1{font-family:"Fraunces",Georgia,serif;font-weight:800;font-size:clamp(2.6rem,11vw,5rem);line-height:1;margin:.4em 0 .2em;letter-spacing:-.02em}
-p.lead{font-size:1.1rem;max-width:34ch;margin:0 auto 1.2em;line-height:1.5;color:#e6dcff}
-.moonwrap{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:24px}A
-#moon{position:relative;width:min(56vw,230px);aspect-ratio:1;border-radius:50%;overflow:hidden;border:0;padding:0;cursor:pointer;
-  background:radial-gradient(circle at 35% 30%,#fffbe8,var(--moon) 55%,#e8cf8e);box-shadow:0 0 0 0 rgba(255,241,196,0);
-  transition:box-shadow .8s}
-#moon::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--deep);transform:translateX(calc(var(--t,0)*100%));transition:transform .9s cubic-bezier(.2,.8,.2,1)}
-#moon.full{box-shadow:0 0 90px 30px rgba(255,241,196,.45)}
-#moon:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--mint);outline-offset:4px}
-#hint{font-size:.95rem;color:var(--lilac);min-height:1.4em}
-#reveal{opacity:0;transform:translateY(12px);transition:opacity .8s,transform .8s;pointer-events:none;height:0;overflow:hidden}
-#reveal.on{opacity:1;transform:none;pointer-events:auto;height:auto;overflow:visible}
+  background:radial-gradient(ellipse at 50% 0%,#2a2470 0%,var(--night) 45%,var(--deep) 100%);background-attachment:fixed;overflow-x:hidden}
+main{max-width:720px;margin:0 auto;padding:32px 20px 72px;text-align:center}
+h1{font-family:"Fraunces",Georgia,serif;font-weight:800;font-size:clamp(2.6rem,11vw,5rem);line-height:1;margin:.2em 0 .25em;letter-spacing:-.02em}
 h2{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:1.5rem;margin:1.6em 0 .3em}
+.lead{font-size:1.1rem;max-width:34ch;margin:0 auto 1em;line-height:1.5;color:#e6dcff}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--mint);outline-offset:4px}
+
+/* Torta */
+.cake{width:min(80vw,320px);margin:56px auto 0;display:flex;flex-direction:column;align-items:center}
+.top{position:relative;width:62%;height:60px;background:var(--lilac);border-top:12px solid var(--moon);border-radius:16px 16px 4px 4px}
+.bottom{width:100%;height:78px;background:var(--rose);border-top:12px solid var(--moon);border-radius:16px 16px 6px 6px}
+.plate{width:116%;height:12px;background:var(--mint);border-radius:0 0 40px 40px;margin-top:-2px}
+.candles{position:absolute;left:0;right:0;bottom:calc(100% + 12px);margin-bottom:-12px;display:flex;justify-content:space-around}
+.candle{position:relative;width:34px;height:76px;background:none;border:0;padding:0}
+.stick{position:absolute;bottom:0;left:11px;width:12px;height:42px;border-radius:3px;background:linear-gradient(90deg,var(--mint),#b5fff0)}
+.candle:nth-child(2n) .stick{background:linear-gradient(90deg,var(--moon),#ffffff)}
+.candle:nth-child(3n) .stick{background:linear-gradient(90deg,var(--rose),#ffc4d6)}
+.flame{position:absolute;bottom:44px;left:10px;width:14px;height:24px;border-radius:50% 50% 50% 50%/62% 62% 38% 38%;
+  background:radial-gradient(circle at 50% 70%,#fff 0%,var(--moon) 40%,#ffb86b 100%);box-shadow:0 0 16px 6px rgba(255,241,196,.45);
+  transform-origin:50% 100%;animation:flick .5s ease-in-out infinite alternate}
+.candle.out .flame{display:none}
+.candle.out::after{content:"";position:absolute;bottom:50px;left:15px;width:4px;height:4px;border-radius:50%;background:#cfc6ee;opacity:0;animation:smoke 1.4s ease-out}
+@keyframes flick{from{transform:scale(1,1) rotate(-3deg)}to{transform:scale(.9,1.1) rotate(3deg)}}
+@keyframes smoke{0%{opacity:.8;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-40px) scale(4)}}
+#hint{margin-top:22px;color:var(--lilac);min-height:1.5em}
+
+/* Revelado */
+#reveal{opacity:0;height:0;overflow:hidden;transition:opacity .8s;pointer-events:none}
+#reveal.on{opacity:1;height:auto;overflow:visible;pointer-events:auto}
 .sky{position:relative;height:300px;margin:12px 0;border-radius:24px;background:rgba(255,255,255,.04);border:1px solid rgba(185,168,255,.25)}
-.star{position:absolute;width:44px;height:44px;border:0;background:none;color:var(--moon);font-size:1.7rem;cursor:pointer;transform:translate(-50%,-50%);transition:transform .2s,color .2s}
+.star{position:absolute;width:44px;height:44px;border:0;background:none;color:var(--moon);font-size:1.7rem;transform:translate(-50%,-50%);transition:transform .2s,color .2s}
 .star:hover{transform:translate(-50%,-50%) scale(1.25)}
 .star.seen{color:var(--rose)}
 #wish{min-height:5.5em;max-width:40ch;margin:12px auto 0;font-size:1.15rem;line-height:1.5}
-.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
-input{font:inherit;padding:12px 16px;border-radius:999px;border:1px solid var(--lilac);background:rgba(255,255,255,.07);color:var(--moon);min-width:0;width:220px}
-input::placeholder{color:#bfb4e6}
-.btn{font:inherit;font-weight:700;padding:12px 24px;border-radius:999px;border:0;cursor:pointer;background:var(--rose);color:#3b0f24}
-.btn:active{transform:scale(.97)}
-.hug{font-size:1.2rem;padding:16px 32px}
-.hug.pop{animation:pop .5s}
+.btn{font-weight:700;padding:16px 32px;border-radius:999px;border:0;background:var(--rose);color:#3b0f24;font-size:1.2rem}
+.btn.pop{animation:pop .5s}
 @keyframes pop{40%{transform:scale(1.25)}100%{transform:scale(1)}}
-#thanks{font-family:"Fraunces",Georgia,serif;font-size:1.5rem;line-height:1.35;max-width:22ch;margin:22px auto 0;opacity:0;transform:scale(.8);transition:opacity .6s,transform .6s cubic-bezier(.2,1.4,.4,1)}
+#thanks{font-family:"Fraunces",Georgia,serif;font-size:1.5rem;line-height:1.35;max-width:22ch;margin:22px auto 0;opacity:0;transform:scale(.85);transition:opacity .6s,transform .6s}
 #thanks.on{opacity:1;transform:none}
-#card{margin:22px auto 0;max-width:420px;padding:24px;border-radius:24px;background:linear-gradient(160deg,rgba(255,143,177,.18),rgba(123,232,212,.14));border:1px solid rgba(255,241,196,.3);display:none}
-#card.on{display:block}
-#card strong{font-family:"Fraunces",Georgia,serif;font-size:1.5rem;display:block;margin-bottom:.4em}
-canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:10}
-@media (prefers-reduced-motion:reduce){#moon::after,#reveal{transition:none}}
+.bit{position:fixed;left:0;top:0;z-index:20;pointer-events:none;will-change:transform,opacity}
 </style>
 </head>
 <body>
-<canvas id="fx" aria-hidden="true"></canvas>
 <main>
-  <div class="moonwrap">
-    <button id="moon" aria-label="Tocá la luna para llenarla"></button>
-    <div id="hint" aria-live="polite">Tocá la luna para llenarla</div>
-  </div>
   <h1>Feliz cumple, Luma</h1>
-  <p class="lead">Hoy la luna se llena de luz solo para vos.</p>
+  <p class="lead">Pedí un deseo y apagá las velas, tocándolas una por una.</p>
+
+  <div class="cake" aria-label="Torta con cinco velas">
+    <div class="top">
+      <div class="candles" id="candles"></div>
+    </div>
+    <div class="bottom"></div>
+    <div class="plate"></div>
+  </div>
+  <div id="hint" aria-live="polite"></div>
 
   <section id="reveal">
     <h2>Tocá las estrellas</h2>
@@ -68,62 +74,83 @@ canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index
     <div id="wish" aria-live="polite">Elegí una estrella ✦</div>
 
     <h2>Dejá tu saludo</h2>
-    <div class="row"><button class="btn hug" id="hug">Enviar abrazo 🤗</button></div>
+    <button class="btn" id="hug">Enviar abrazo 🤗</button>
     <p id="thanks" aria-live="polite">Abrazo recibido, gracias por ser la persona tan genial que eres</p>
   </section>
 </main>
+
 <script>
-const moon=document.getElementById('moon'),hint=document.getElementById('hint'),reveal=document.getElementById('reveal');
-const steps=[.25,.5,.75,1];let phase=0;
-const hints=['Seguí tocando…','Casi, un poco más…','Una vez más…','¡Luna llena!'];
-moon.addEventListener('click',()=>{
-  if(phase>=steps.length)return;
-  moon.style.setProperty('--t',steps[phase]);
-  hint.textContent=hints[phase];phase++;
-  if(phase===steps.length){moon.classList.add('full');reveal.classList.add('on');confetti();setTimeout(()=>reveal.scrollIntoView({behavior:'smooth',block:'start'}),900)}
-});
-const wishes=[
- 'Que cada día tenga al menos una razón para reírte a carcajadas.',
- 'Que los proyectos que soñás empiecen a salir de la cabeza y se hagan reales.',
- 'Que estés rodeada de gente que te quiere tal como sos.',
- 'Que tengas tiempo para descansar sin culpa.',
- 'Que este año te sorprenda con cosas lindas que ni imaginabas.',
- 'Que nunca te falte luz, ni propia ni prestada.'
+var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+var colors = ['#ff8fb1','#7be8d4','#b9a8ff','#fff1c4'];
+
+function pop(x, y, n, heart) {
+  if (reduce) return;
+  for (var i = 0; i < n; i++) {
+    var el = document.createElement('span');
+    el.className = 'bit';
+    if (heart) { el.textContent = '❤'; el.style.fontSize = (14 + Math.random() * 16) + 'px'; el.style.color = '#ff8fb1'; }
+    else { el.style.width = el.style.height = (5 + Math.random() * 6) + 'px'; el.style.background = colors[i % 4]; }
+    document.body.appendChild(el);
+    var a = Math.random() * Math.PI * 2, d = 80 + Math.random() * 160;
+    var dx = Math.cos(a) * d, dy = Math.sin(a) * d - 40;
+    var anim = el.animate([
+      { transform: 'translate(' + x + 'px,' + y + 'px)', opacity: 1 },
+      { transform: 'translate(' + (x + dx) + 'px,' + (y + dy) + 'px) rotate(' + (Math.random() * 360) + 'deg)', opacity: 1, offset: .7 },
+      { transform: 'translate(' + (x + dx) + 'px,' + (y + dy + 80) + 'px)', opacity: 0 }
+    ], { duration: 1100 + Math.random() * 600, easing: 'cubic-bezier(.2,.7,.3,1)' });
+    anim.onfinish = (function (e) { return function () { e.remove(); }; })(el);
+  }
+}
+function center(el) { var r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }
+
+// Velas
+var box = document.getElementById('candles'), hint = document.getElementById('hint'), left = 5;
+function setHint() { hint.textContent = left > 0 ? 'Quedan ' + left + (left === 1 ? ' vela encendida' : ' velas encendidas') : '¡Deseo pedido! 🌟'; }
+for (var i = 0; i < 5; i++) {
+  var c = document.createElement('button');
+  c.className = 'candle'; c.setAttribute('aria-label', 'Apagar vela ' + (i + 1));
+  c.innerHTML = '<span class="flame"></span><span class="stick"></span>';
+  c.onclick = function () {
+    if (this.classList.contains('out')) return;
+    this.classList.add('out'); left--; setHint();
+    var p = center(this); pop(p[0], p[1] - 20, 8, false);
+    if (left === 0) {
+      var cp = center(box); pop(cp[0], cp[1], 70, false);
+      document.getElementById('reveal').classList.add('on');
+      setTimeout(function () { document.getElementById('reveal').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 900);
+    }
+  };
+  box.appendChild(c);
+}
+setHint();
+
+// Estrellas
+var wishes = [
+  'Que cada día tenga al menos una razón para reírte a carcajadas.',
+  'Que los proyectos que soñás empiecen a salir de la cabeza y se hagan reales.',
+  'Que estés rodeada de gente que te quiere tal como sos.',
+  'Que tengas tiempo para descansar sin culpa.',
+  'Que este año te sorprenda con cosas lindas que ni imaginabas.',
+  'Que nunca te falte luz, ni propia ni prestada.'
 ];
-const pos=[[18,28],[42,16],[72,24],[28,64],[56,56],[82,70]];
-const sky=document.getElementById('sky'),wish=document.getElementById('wish');
-pos.forEach((p,i)=>{
-  const b=document.createElement('button');b.className='star';b.textContent='✦';
-  b.style.left=p[0]+'%';b.style.top=p[1]+'%';b.setAttribute('aria-label','Estrella '+(i+1));
-  b.onclick=()=>{wish.textContent=wishes[i];b.classList.add('seen');burst(b)};
+var pos = [[18,28],[42,16],[72,24],[28,64],[56,56],[82,70]];
+var sky = document.getElementById('sky'), wish = document.getElementById('wish');
+pos.forEach(function (p, i) {
+  var b = document.createElement('button');
+  b.className = 'star'; b.textContent = '✦';
+  b.style.left = p[0] + '%'; b.style.top = p[1] + '%';
+  b.setAttribute('aria-label', 'Estrella ' + (i + 1));
+  b.onclick = function () { wish.textContent = wishes[i]; b.classList.add('seen'); var c = center(b); pop(c[0], c[1], 12, false); };
   sky.appendChild(b);
 });
-const hug=document.getElementById('hug'),thanks=document.getElementById('thanks');
-hug.onclick=()=>{
-  hug.classList.remove('pop');void hug.offsetWidth;hug.classList.add('pop');
-  const r=hug.getBoundingClientRect();hearts(r.left+r.width/2,r.top+r.height/2);
-  add(r.left+r.width/2,r.top+r.height/2,90,1.5);
-  thanks.classList.add('on');
+
+// Abrazo
+var hug = document.getElementById('hug');
+hug.onclick = function () {
+  hug.classList.remove('pop'); void hug.offsetWidth; hug.classList.add('pop');
+  var c = center(hug); pop(c[0], c[1], 28, true); pop(c[0], c[1], 70, false);
+  document.getElementById('thanks').classList.add('on');
 };
-const cv=document.getElementById('fx'),cx=cv.getContext('2d');let parts=[],run=false;
-function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio}
-size();addEventListener('resize',size);
-const cols=['#ff8fb1','#7be8d4','#b9a8ff','#fff1c4'];
-function add(x,y,n,spread){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=(Math.random()*6+2)*spread;
-  parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-4,r:Math.random()*5+3,c:cols[i%4],l:100+Math.random()*60})}go()}
-function confetti(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-  add(innerWidth*.25,innerHeight*.6,70,1.2);add(innerWidth*.75,innerHeight*.6,70,1.2)}
-function burst(el){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-  const r=el.getBoundingClientRect();add(r.left+r.width/2,r.top+r.height/2,18,.7)}
-function hearts(x,y){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-  for(let i=0;i<26;i++){const a=Math.random()*Math.PI*2,sp=Math.random()*7+3;
-    parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-5,r:Math.random()*14+14,c:'#ff8fb1',h:1,l:90+Math.random()*50})}go()}
-function go(){if(run)return;run=true;(function f(){
-  cx.clearRect(0,0,cv.width,cv.height);const d=devicePixelRatio;
-  parts=parts.filter(p=>p.l>0);
-  parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.18;p.l--;cx.globalAlpha=Math.min(1,p.l/40);cx.fillStyle=p.c;
-    if(p.h){cx.font=(p.r*d)+'px serif';cx.fillText('❤',p.x*d,p.y*d)}else cx.fillRect(p.x*d,p.y*d,p.r*d,p.r*d)});
-  if(parts.length)requestAnimationFrame(f);else{run=false;cx.clearRect(0,0,cv.width,cv.height)}})()}
 </script>
 </body>
 </html>
